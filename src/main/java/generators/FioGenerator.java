@@ -1,13 +1,11 @@
 package generators;
 
+import person.Fio;
+
 import static utils.FileReader.getLinesFromFile;
 import static utils.MyMath.getDigitsSum;
 
 public class FioGenerator {
-
-    private String lastName;
-    private String firstName;
-    private String middleName;
 
     /**
      * ФИО берутся из соответствующих файлов по индексу в листе:
@@ -17,36 +15,31 @@ public class FioGenerator {
      *
      * @param code код для генерации
      */
-    public final void generateParams(final int code) {
+
+    public static Fio getNewFio(final int code) {
         final int lastNameIndex = getDigitsSum(code);
+        final int firstNameIndex = getDigitsSum(code / 100);
+        final int middleNameIndex = getDigitsSum(code % 100);
+
         final String sex = (lastNameIndex % 2 == 0) ? "f" : "m";
-        setLastNameFromFile(lastNameIndex, sex);
-        setFirstNameFromFile(getDigitsSum(code / 100), sex);
-        setMiddleNameFromFile(getDigitsSum(code % 100), sex);
+
+        final String lastName = getLastNameFromFile(lastNameIndex, sex);
+        final String firstName = getFirstNameFromFile(firstNameIndex, sex);
+        final String middleName = getMiddleNameFromFile(middleNameIndex, sex);
+
+        return new Fio(lastName, firstName, middleName);
     }
 
-    public final String getLastName() {
-        return lastName;
+    private static String getLastNameFromFile(final int i, final String sex) {
+        return getLinesFromFile("lastNames_" + sex).get(i);
     }
 
-    public final String getFirstName() {
-        return firstName;
+    private static String getFirstNameFromFile(final int i, final String sex) {
+        return getLinesFromFile("names_" + sex).get(i);
     }
 
-    public final String getMiddleName() {
-        return middleName;
-    }
-
-    private void setLastNameFromFile(final int i, final String sex) {
-        lastName = getLinesFromFile("lastNames_" + sex).get(i);
-    }
-
-    private void setFirstNameFromFile(final int i, final String sex) {
-        firstName = getLinesFromFile("names_" + sex).get(i);
-    }
-
-    private void setMiddleNameFromFile(final int i, final String sex) {
-        middleName = getLinesFromFile("middleNames_" + sex).get(i);
+    private static String getMiddleNameFromFile(final int i, final String sex) {
+        return getLinesFromFile("middleNames_" + sex).get(i);
     }
 }
 

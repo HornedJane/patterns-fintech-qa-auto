@@ -2,28 +2,22 @@ package generators;
 
 import person.Physical;
 
-public class PhysGenerator implements Generator<Physical> {
-
-    private int age;
-    private int weight;
-    private double height;
+public class PhysGenerator {
 
     /**
      * Физические параметры генерируются по второй цифре кода:
      * Возраст: 10..100
      * Вес: 30..120 кг
      * Рост: 1..1,9 м.
+     *
+     * @param code код для генерации
      */
-    @Override
-    public final void generateParams(final int code) {
-        final int i = code % 1000 / 100;
-        age = (i + 1) * 10;
-        weight = 30 + i * 10;
-        height = (100 + i * 10) / 100.00;
-    }
 
-    @Override
-    public final Physical buildResponse() {
+    public static Physical getNewPhysical(final int code) {
+        final int i = code % 1000 / 100;
+        int age = (i + 1) * 10;
+        int weight = 30 + i * 10;
+        double height = (100 + i * 10) / 100.00;
         return new Physical(age, weight, height);
     }
 }
